@@ -1,6 +1,7 @@
 package com.example.d.ebookreader;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -25,6 +26,7 @@ public class secBookShelf extends AppCompatActivity {
     private ViewPager viewPager;
     private List<String> titleList;//标题栏
     private PagerTabStrip pagerTabStrip;
+    private MyDBHelper helper;
     //gridview数据
   private List<bookGrid> mDatas;
     private List<Map<String, Object>> dataList;
@@ -36,6 +38,7 @@ public class secBookShelf extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sec_book_shelf);
         viewPager=(ViewPager)findViewById(R.id.viewpager);
+        helper=new MyDBHelper(this,"user.db",null,1);
         pagerTabStrip=(PagerTabStrip)findViewById(R.id.pagertab);
         pagerTabStrip.setTabIndicatorColor(Color.BLUE);
         LayoutInflater inflater=getLayoutInflater();
@@ -43,7 +46,8 @@ public class secBookShelf extends AppCompatActivity {
         view2=inflater.inflate(R.layout.page2_my,null);
      gridView=(GridView) view1.findViewById(R.id.gridview);//从装有gridview的view里面找到gridview
         //设置gridview
-        mDatas=new ArrayList<bookGrid>();
+        init();
+
       /*  mDatas.add(R.drawable.ic_launcher);//book pic
         mDatas.add(R.drawable.ic_launcher);
         mDatas.add(R.drawable.ic_launcher);
@@ -58,20 +62,22 @@ public class secBookShelf extends AppCompatActivity {
         titleList.add("书架");
         titleList.add("我的");
         Intent intent=getIntent();
-        String data= intent.getStringExtra("name");
+       String data= intent.getStringExtra("name");
       // Log.d("bs",data);
-        if (iso==false){
-            iso=true;
-        }
-        else{
+       // int num=bundle.getInt("num");
+        if(data!=null){
+            Bundle bundle=intent.getExtras();
+            String name=bundle.getString("name");
+            String Uri=bundle.getString("Uri");
             iso=false;
-            Toast.makeText(getApplicationContext(), data,
+            Toast.makeText(getApplicationContext(), "hahaha",
                     Toast.LENGTH_SHORT).show();
             fileList fl=new fileList();
-            bookFile bf=fl.list_map.get(Integer.parseInt(data));
-            bookGrid bg=new bookGrid(bf.getName(),R.drawable.ic_launcher,bf.getUri());
+           // int i=Integer.parseInt(data);
+           // bookFile bf=fl.list_map.get(i);
+            bookGrid bg=new bookGrid(name,R.drawable.ic_launcher,Uri);
           //  bookGrid bg=new bookGrid(fl.list_map.get(Integer.parseInt(data));
-            mDatas.add(bg);
+            mDatas.add(0,bg);
             adapter=new GridViewAdapter(view1.getContext(), mDatas);
             gridView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -128,5 +134,10 @@ public class secBookShelf extends AppCompatActivity {
             }
         };
         viewPager.setAdapter(pagerAdapter);
+    }
+    public void init(){
+        mDatas=new ArrayList<bookGrid>();
+        SQLiteDatabase db=helper.getWritableDatabase();
+
     }
 }

@@ -29,6 +29,7 @@ public class fileList extends AppCompatActivity {
     public int currentItem;
     public List<bookFile> list_map=new ArrayList<bookFile>();
     boolean finish=false;
+    private bookFile bf;
     private LinearLayout l1;
     private ListView listView;
     private TextView wt;
@@ -132,15 +133,23 @@ public class fileList extends AppCompatActivity {
         mPopup.setOutsideTouchable(false);//防止popup window 弹出不正常
         mPopup.setFocusable(false);
         //设置popup window的点击响应
-        Button btnIm=(Button)contentView.findViewById(R.id.btn_im);
+        final Button btnIm=(Button)contentView.findViewById(R.id.btn_im);
         btnIm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String name=list_map.get(ch).getName();
+                String Uri=list_map.get(ch).getUri();
+                Bundle bundle=new Bundle();
+                bundle.putString("name",name);
+                bundle.putString("Uri",Uri);
+                bundle.putInt("num",ch);
                 Toast.makeText(getApplicationContext(), "导入文件",
                         Toast.LENGTH_SHORT).show();
                 //导入
                 Intent intent=new Intent(fileList.this,secBookShelf.class);
-                intent.putExtra("name",ch+"");
+                intent.putExtras(bundle);
+                intent.putExtra("num",ch+"");
+                mPopup.dismiss();//防止出现窗体泄露的情况
                 startActivity(intent);
                 fileList.this.finish();//保证按返回键时返回上一个页面
             }
