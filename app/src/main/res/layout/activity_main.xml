@@ -10,14 +10,91 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.d.ebookreader.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-    <Button
-        android:id="@+id/btn1"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="start"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="117dp"
+                android:layout_height="wrap_content"
+                android:text="UserName:"
+
+                />
+            <EditText
+                android:layout_width="283dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:inputType="text"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="117dp"
+                android:layout_height="wrap_content"
+                android:text="PassWord :"
+                android:editable="false" />
+            <EditText
+                android:layout_width="285dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/pass"
+                android:textIsSelectable="true"
+                android:inputType="textPassword"
+
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+            >
+            <CheckBox
+                android:id="@+id/ck1"
+                android:text="remember password"
+                android:checked="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="5"
+            >
+            <Button
+                android:id="@+id/login"
+                android:text="登录"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="#EE6AA7"
+                android:textColor="#FFFAFA"
+                />
+            <Button
+                android:id="@+id/reg"
+                android:text="注册账户"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="#EE6AA7"
+                android:textColor="#FFFAFA"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

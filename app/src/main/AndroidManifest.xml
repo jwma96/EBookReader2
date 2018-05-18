@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.d.ebookreader">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -16,8 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".secBookShelf"></activity>
-        <activity android:name=".fileList"></activity>
+        <activity android:name=".secBookShelf" />
+        <activity android:name=".fileList" />
+        <activity android:name=".user" />
+        <activity android:name=".set" />
+        <activity android:name=".ReadingBook"></activity>
     </application>
 
 </manifest>
