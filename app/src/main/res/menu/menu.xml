@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+        >
+        <item
+            android:id="@+id/it_copy"
+            android:title="复制1"
+            android:icon="@drawable/add"
+            />
+        <item
+            android:id="@+id/it_cut"
+            android:title="剪藏2"
+            android:icon="@drawable/add"
+            />
+    <item
+        android:id="@+id/it_write"
+        android:title="写感想3"
+        android:icon="@drawable/add"
+        />
+</menu>

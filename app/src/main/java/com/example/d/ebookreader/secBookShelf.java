@@ -40,7 +40,7 @@ public class secBookShelf extends AppCompatActivity {
     private Button serachBtn;//搜索按钮
     private Button user;//用户按钮
     private String searchName;
-    private MainActivity ma;
+   // private MainActivity ma;
     private MyDBHelper dbHelper;
     private SQLiteDatabase db;
     private    ContentValues values;
@@ -114,7 +114,7 @@ public class secBookShelf extends AppCompatActivity {
             fileList fl=new fileList();
            // int i=Integer.parseInt(data);
            // bookFile bf=fl.list_map.get(i);
-            bookGrid bg=new bookGrid(name,R.drawable.books,Uri);
+            bookGrid bg=new bookGrid(name,R.drawable.books,Uri,0);
           //  bookGrid bg=new bookGrid(fl.list_map.get(Integer.parseInt(data));
             //添加到数据库
           //  values.put("id",1);
@@ -151,16 +151,20 @@ public class secBookShelf extends AppCompatActivity {
                    // Log.i("po","hahah");
                    // searchText.setText("text");
                     String Uri=mDatas.get(position).getUri();
-                    int cupage=currentPage[position];
-                    int myd=bookId[position];
+                    String bName=mDatas.get(position).getName();
+                    int cupage=mDatas.get(position).getCurrentPage();
+                   // int cupage=currentPage[position];
+                   // int myd=bookId[position];
                     Bundle bundle=new Bundle();
-                   // bundle.putInt("position",position);
-                    bundle.putInt("bookId",myd);
+                    bundle.putString("bName",bName);
+                    //bundle.putInt("bookId",myd);
                     bundle.putString("Uri",Uri);
+                    bundle.putInt("position",position);
                     bundle.putInt("currentPage",cupage);
                     Intent intent=new Intent(secBookShelf.this,ReadingBook.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -208,17 +212,17 @@ public class secBookShelf extends AppCompatActivity {
         cursor=db.query("myBook",null,null,null,null,null,null);//都为null表示查询全部数据
         int num=cursor.getCount();//获取数据库中的数据条数
         currentPage=new int[num];
-       bookId=new int[num];
+      // bookId=new int[num];
         for(cursor.moveToFirst();!cursor.isAfterLast();cursor.moveToNext()){
             String name=cursor.getString(cursor.getColumnIndex("bName"));
             String uri=cursor.getString(cursor.getColumnIndex("uri"));
             //获取当前页
             int cpage=cursor.getInt(cursor.getColumnIndex("currentpage"));
             int bId=cursor.getInt(cursor.getColumnIndex("id"));
-            currentPage[num-1]=cpage;
-            bookId[num-1]=bId;
+          //  currentPage[num-1]=cpage;
+          //  bookId[num-1]=bId;
             num--;
-            bg=new bookGrid(name,R.drawable.books,uri);
+            bg=new bookGrid(name,R.drawable.books,uri,cpage);
             mDatas.add(0,bg);//保证倒叙插入
            // num--;用add（num，bg）会出现第一个插入的数据在listview为空的情况下插入，会报错 越界
         }

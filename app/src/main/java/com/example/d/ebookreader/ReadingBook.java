@@ -1,13 +1,25 @@
 package com.example.d.ebookreader;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Layout;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +32,7 @@ public class ReadingBook extends AppCompatActivity {
     private int currentPage;//书签
     private int bId;//书籍在数据库表格中的位置
     private String Uri;
+    private String bookname;
     private RandomAccessFile raf;
     private long bcount,pagenum;//总字节数 总页面数
     private TextView readingText;//显示文本的TextView
@@ -30,22 +43,45 @@ public class ReadingBook extends AppCompatActivity {
     private  byte [] buff;
     private byte [] b;
     private int size;
-
+    private MyDBHelper dbHelper;
+    private SQLiteDatabase db;
+    private ContentValues values;
+    private Cursor cursor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reading_book);
         readingText=(TextView)findViewById(R.id.readingText);
+       /* DisplayMetrics metric = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metric);
+        int width = metric.widthPixels;     // 屏幕宽度（像素）
+        int height = metric.heightPixels;   // 屏幕高度（像素）
+        ViewGroup.LayoutParams params = readingText.getLayoutParams();
+        params.height=height/10;
+        //params.width =width/10;
+        readingText.setLayoutParams(params);//设置textview的高度和宽度*/
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
        Uri=bundle.getString("Uri");
+     bookname=bundle.getString("bName");
       //   position=bundle.getInt("position");
         currentPage=bundle.getInt("currentPage");
-         bId=bundle.getInt("bookId");
+       //  bId=bundle.getInt("bookId");
         file=new File(Uri);
         String a= ProcessText(file,1);//页码从1开始
         readingText.setText(a);
         initView();
+
+       //readingText.setCustomSelectionActionModeCallback(new MyActionModeCallback());
+        readingText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                readingText.setTextIsSelectable(true);
+                Toast.makeText(ReadingBook.this, "hahahah", Toast.LENGTH_SHORT).show();
+               readingText.setCustomSelectionActionModeCallback(new MyActionModeCallback());
+                return false;
+            }
+        });
     }
     protected void onStart() {
         super.onStart();
@@ -58,6 +94,30 @@ public class ReadingBook extends AppCompatActivity {
             }
         });
 
+    }
+    //重写返回键方法
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+           // String deleteData="DELETE FROM myBook WHERE id =1";
+            dbHelper=new MyDBHelper(this,"bookreader.db",null,1);
+            db=dbHelper.getWritableDatabase();
+            db.delete("myBook","bName=?",new String[]{bookname} );
+            //db.delete("Score", "name = ?", new String[] { name });
+            //  db.execSQL(deleteData);//删除某条数据后重新插入，再次加载bookshelf的时候就会刷新书架的顺序
+            values=new ContentValues();
+            values.put("bName",bookname);
+            values.put("currentpage",currentPage);//0还是1？？？
+            values.put("position",0);//记录在gridview中的位置，可能没用了
+            values.put("uri",Uri);
+            db.insert("myBook",null,values);
+            Intent intent=new Intent(ReadingBook.this,secBookShelf.class);
+            startActivity(intent);
+
+            ReadingBook.this.finish();
+
+        }
+        return true;
     }
     private void initView(){
         //show = (TextView)super.findViewById(R.id.show);
@@ -190,5 +250,100 @@ public class ReadingBook extends AppCompatActivity {
         int res=layout.getLineForVertical(topOfLastLine);//根据纵坐标得到对应的行数
         return res;
     }
+    private class MyActionModeCallback implements ActionMode.Callback {
+        private Menu mMenu;
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
 
-}
+            return true;
+        }
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+
+            MenuInflater menuInflater = actionMode.getMenuInflater();
+            menu.clear();//屏蔽其他item
+            menuInflater.inflate(R.menu.menu,menu);
+            return true;
+        }
+
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()){
+                case R.id.it_copy:
+                    String selectText = getSelectText(SelectMode.COPY);
+                    Toast.makeText(ReadingBook.this, "选中的内容已复制到剪切板", Toast.LENGTH_SHORT).show();
+                    readingText.setTextIsSelectable(false);
+                    actionMode.finish();
+                    break;
+                case R.id.it_cut:
+                    //剪藏
+                    String txt = getSelectText(SelectMode.COPY);
+                    ClipboardManager cbs = (ClipboardManager)ReadingBook.this.getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clipData=cbs.getPrimaryClip();
+                    CharSequence mytext;
+                    if (clipData != null && clipData.getItemCount() > 0) {
+                         mytext = clipData.getItemAt(0).getText();//从数据集获取已复制的第一条数据文本？？？
+                        Intent intent=new Intent(ReadingBook.this,sharePic.class);
+                      //  intent.putCharSequenceArrayListExtra("text",mytext);
+                        intent.putExtra("text",mytext);
+                        //书名也应该传递过去
+                        startActivity(intent);
+                        readingText.setTextIsSelectable(false);
+                        actionMode.finish();
+                    }else {
+                        Toast.makeText(ReadingBook.this, "剪藏失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                   // readingText.setText(txt);
+                  // Toast.makeText(ReadingBook.this, txt, Toast.LENGTH_SHORT).show();
+                    //跳转到另一个生成图片的界面
+
+                    break;
+                case R.id.it_write:
+                    Toast.makeText(ReadingBook.this, "写感想", Toast.LENGTH_SHORT).show();
+                    actionMode.finish();
+                    //this.mMenu.close();
+                    break;
+
+
+
+            }
+            return true;//只有自定义的item有响应，系统的无效
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+
+        }
+    }
+
+    /**
+     *  统一处理复制和剪切的操作
+     * @param mode 用来区别是复制还是剪切
+     * @return
+     */
+    private String getSelectText(SelectMode mode) {
+        //获取剪切板管理者
+        ClipboardManager cbs = (ClipboardManager)ReadingBook.this.getSystemService(CLIPBOARD_SERVICE);
+        //获取选中的起始位置
+        int selectionStart = readingText.getSelectionStart();
+        int selectionEnd = readingText.getSelectionEnd();
+        Log.i("选择文本","selectionStart="+selectionStart+",selectionEnd="+selectionEnd);
+        //截取选中的文本
+        String txt = readingText.getText().toString();
+        String substring = txt.substring(selectionStart, selectionEnd);
+        Log.i("选择文本","substring="+substring);
+        //将选中的文本放到剪切板
+        cbs.setPrimaryClip(ClipData.newPlainText(null,substring));
+        //如果是复制就不往下操作了
+        if (mode==SelectMode.COPY)
+            return txt;
+        txt = txt.replace(substring, "");
+        return txt;
+    }
+
+    /**
+     * 用枚举来区分是复制还是剪切
+     */
+    public enum SelectMode{
+        COPY,CUT;
+    }
+    }

@@ -21,7 +21,8 @@
         <activity android:name=".fileList" />
         <activity android:name=".user" />
         <activity android:name=".set" />
-        <activity android:name=".ReadingBook"></activity>
+        <activity android:name=".ReadingBook" />
+        <activity android:name=".sharePic"></activity>
     </application>
 
 </manifest>

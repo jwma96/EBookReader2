@@ -8,10 +8,12 @@ public class bookGrid {
     private String name;
     private int imageId;
     private String uri;
-    public  bookGrid(String name,int imageId,String uri){
+    private int currentPage;
+    public  bookGrid(String name,int imageId,String uri,int currentPage){
         this.name=name;
         this.imageId=imageId;
         this.uri=uri;
+        this.currentPage=currentPage;
     }
     public String getName(){
         return name;
@@ -22,4 +24,5 @@ public class bookGrid {
     public String getUri(){
         return uri;
     }
+    public int getCurrentPage(){return currentPage;}
 }
