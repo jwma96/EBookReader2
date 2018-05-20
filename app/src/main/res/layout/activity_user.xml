@@ -52,17 +52,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
-    android:drawableLeft="@drawable/set"
+    android:drawableLeft="@drawable/icon_cog"
     android:text="设置"
     />
     <Button
         android:id="@+id/exit"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/logout"
         android:text="退出登录"
         />
 
+    <Button
+        android:id="@+id/mynote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/icon_document"
+        android:text="我的笔记"
+        />
 </LinearLayout>
 </RelativeLayout>

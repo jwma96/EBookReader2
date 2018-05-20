@@ -61,8 +61,8 @@ public class secBookShelf extends AppCompatActivity {
             public void onClick(View view) {
                 searchName=searchText.getText().toString();
                 //根据searchName搜索书架
-                Intent intent=new Intent(secBookShelf.this,fileTest.class);
-                startActivity(intent);
+             //   Intent intent=new Intent(secBookShelf.this,fileTest.class);
+               // startActivity(intent);
             }
         });
         user=(Button)findViewById(R.id.my);

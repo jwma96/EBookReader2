@@ -37,7 +37,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         reg.setOnClickListener(this);
         ck.setOnClickListener(this);
         pref= PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isRem=pref.getBoolean("remember_password",false);
+        boolean isRem=pref.getBoolean("remember_password",false);//第一个参数是键，传入存储数据时使用的键就可以得到对应的值
+        boolean isLogin=pref.getBoolean("isLogin",false);//第二个参数是默认值，当传入的键找不到对应的值时就以默认值返回
+       if(isLogin){
+           Intent intent =new Intent(MainActivity.this,secBookShelf.class);
+           startActivity(intent);
+           finish();
+       }
         if(isRem){
             String account=pref.getString("account","");
             String password=pref.getString("password","");
@@ -90,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     editor.putBoolean("remember_password",true);
                     editor.putString("account",name);
                     editor.putString("password",pass);
+                    editor.putBoolean("isLogin",true);//记录是否登录
+
                 }
                 else{
                     editor.clear();
