@@ -20,13 +20,19 @@ public class GridViewAdapter extends BaseAdapter
     private List<bookGrid> list;
     LayoutInflater layoutInflater;
     private ImageView mImageView;
+    private boolean isShowDelete;
+    private ImageView delete;
+
 
     public GridViewAdapter(Context context, List<bookGrid> list) {
         this.context = context;
         this.list = list;
         layoutInflater = LayoutInflater.from(context);
     }
-
+    public void setIsShowdelete(boolean isShowDelete){
+        this.isShowDelete=isShowDelete;
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         return list.size()+1;//注意此处 change size
@@ -48,10 +54,12 @@ public class GridViewAdapter extends BaseAdapter
         convertView = layoutInflater.inflate(R.layout.gridview_item, null);
         mImageView = (ImageView) convertView.findViewById(R.id.img);
         TextView textView=(TextView)convertView.findViewById(R.id.bookname);
+        delete=(ImageView)convertView.findViewById(R.id.delete);
        if (position < list.size()) {
            mImageView.setBackgroundResource(list.get(position).getImageId());
             //mImageView.setBackgroundResource(R.drawable.add);
            textView.setText(list.get(position).getName());
+           delete.setVisibility(isShowDelete ? View.VISIBLE : View.GONE);//通过isShowDelete控制是否显示
         }else{
             mImageView.setBackgroundResource(R.drawable.add);//最后一个显示加号图片
            textView.setText("");

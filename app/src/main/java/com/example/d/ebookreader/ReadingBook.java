@@ -77,9 +77,11 @@ public class ReadingBook extends AppCompatActivity {
             @Override
             public boolean onLongClick(View view) {
                 readingText.setTextIsSelectable(true);
-                Toast.makeText(ReadingBook.this, "hahahah", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ReadingBook.this, "hahahah", Toast.LENGTH_SHORT).show();
                readingText.setCustomSelectionActionModeCallback(new MyActionModeCallback());
                 return false;
+                //如果将onLongClick返回false，那么执行完长按事件后，还有执行单击事件。
+               // 如果返回true，只执行长按事件
             }
         });
     }
@@ -113,7 +115,7 @@ public class ReadingBook extends AppCompatActivity {
             db.insert("myBook",null,values);
             Intent intent=new Intent(ReadingBook.this,secBookShelf.class);
             startActivity(intent);
-
+            db.close();
             ReadingBook.this.finish();
 
         }

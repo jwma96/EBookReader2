@@ -9,11 +9,13 @@ public class bookGrid {
     private int imageId;
     private String uri;
     private int currentPage;
+   // private boolean isShowDelete;
     public  bookGrid(String name,int imageId,String uri,int currentPage){
         this.name=name;
         this.imageId=imageId;
         this.uri=uri;
         this.currentPage=currentPage;
+      //  this.isShowDelete=isShowDelete;
     }
     public String getName(){
         return name;
@@ -25,4 +27,5 @@ public class bookGrid {
         return uri;
     }
     public int getCurrentPage(){return currentPage;}
+
 }

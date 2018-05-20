@@ -50,7 +50,7 @@ public class fileList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_list);
-       l1=(LinearLayout)findViewById(R.id.L1);//l1加载列表  可改为gifView
+       l1=(LinearLayout)findViewById(R.id.L1);//l1加载  可改为gifView
         listView=(ListView)findViewById(R.id.list_view);//lView列表
         cb=(CheckBox)findViewById(R.id.cb_st);//复选框
         wt=(TextView)findViewById(R.id.wT);
@@ -223,7 +223,7 @@ class loadTask extends AsyncTask<Void,Void,Void>{
     }
     protected void onPostExecute(Void avoid){
        // if(list_map.size()==0){
-         //   wt.setText("无txt文件");
+         //  wt.setText("无txt文件");
         //}
        // else {
             adapter = new FileAdapter(fileList.this, R.layout.list_items, list_map);

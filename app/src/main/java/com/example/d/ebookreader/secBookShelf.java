@@ -48,6 +48,7 @@ public class secBookShelf extends AppCompatActivity {
     private bookGrid bg;
     private int   []currentPage;
     private int []bookId;//存储记录在数据库中的id，方便修改
+    private boolean isShowDelete=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,8 @@ public class secBookShelf extends AppCompatActivity {
             public void onClick(View view) {
                 searchName=searchText.getText().toString();
                 //根据searchName搜索书架
+                Intent intent=new Intent(secBookShelf.this,fileTest.class);
+                startActivity(intent);
             }
         });
         user=(Button)findViewById(R.id.my);
@@ -129,6 +132,36 @@ public class secBookShelf extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }
 
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //通过isShowDeletel来决定是否显示小图标close
+                if(isShowDelete){
+                    isShowDelete=false;//长按显示小图标，然后再按取消显示
+                }
+                else{
+                    isShowDelete=true;
+                    adapter.setIsShowdelete(isShowDelete);//设置close小图标显示
+                    gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            String name=mDatas.get(i).getName();
+                            mDatas.remove(i);//从list中删除这条数据
+                            isShowDelete=false;//设置为false，操作完成后将close设为不可见
+                            db.delete("myBook","bName=?",new String[]{name} );//删除数据库中该条数据
+                            adapter=new GridViewAdapter(view1.getContext(), mDatas);//更新adapter
+                            gridView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();//更新gridview的显示
+
+                        }
+                    });
+                }
+                adapter.setIsShowdelete(isShowDelete);//执行完操作后close小图标消失
+                return true;
+                //如果将onLongClick返回false，那么执行完长按事件后，还有执行单击事件。
+                // 如果返回true，只执行长按事件
+            }
+        });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -137,6 +170,7 @@ public class secBookShelf extends AppCompatActivity {
                 if(position==parent.getChildCount()-1){
                     Intent intent=new Intent(secBookShelf.this,fileList.class);
                     startActivity(intent);
+                    //db.close();
                    finish();
 
 //写入Intent传递回来的数据
@@ -164,6 +198,7 @@ public class secBookShelf extends AppCompatActivity {
                     Intent intent=new Intent(secBookShelf.this,ReadingBook.class);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                  //  db.close();
                     finish();
                 }
 
@@ -228,4 +263,5 @@ public class secBookShelf extends AppCompatActivity {
         }
 
     }
+
 }
