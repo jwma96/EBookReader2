@@ -28,4 +28,7 @@ public class bookFile {
         return isCho;
     }
     public String getUri(){return uri;}
+    public void setIsCho(boolean isCho){
+        this.isCho=isCho;
+    }
 }

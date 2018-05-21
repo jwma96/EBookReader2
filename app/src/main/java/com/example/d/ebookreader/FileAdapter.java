@@ -35,7 +35,7 @@ public class FileAdapter extends ArrayAdapter<bookFile>{
         fImage.setImageResource(file.getImageId());
         textViewn.setText(file.getName());
         textViews.setText(file.getSize());
-       ckb.setChecked(file.getIsCho());
+     //  ckb.setChecked(file.getIsCho());
         String uri=file.getUri();
 
       //  if(position==f.currentItem){
@@ -47,12 +47,12 @@ public class FileAdapter extends ArrayAdapter<bookFile>{
             //    ckb.setChecked(false);
             // }
        // }
-        if (position == selectedPosition) {
-            ckb.setChecked(true);
-        }
-        else{
+       // if (position == selectedPosition) {
+          //  ckb.setChecked(true);
+      //  }
+        //else{
            // convertView.setBackgroundColor(Color.TRANSPARENT);
-        }
+       // }
             return view;
 
     }

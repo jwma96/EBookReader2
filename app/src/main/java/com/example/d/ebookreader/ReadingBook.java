@@ -300,7 +300,12 @@ public class ReadingBook extends AppCompatActivity {
 
                     break;
                 case R.id.it_write:
-                    Toast.makeText(ReadingBook.this, "写感想", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReadingBook.this, bookname, Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(ReadingBook.this,noteWrite.class);
+                   // Bundle bundle=new Bundle();
+                   // bundle.putString("bookName",bookname);
+                    intent.putExtra("bookname",bookname);
+                    startActivity(intent);
                     actionMode.finish();
                     //this.mMenu.close();
                     break;

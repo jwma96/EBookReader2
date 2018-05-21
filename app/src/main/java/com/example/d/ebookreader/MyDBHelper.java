@@ -20,6 +20,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
             +"currentpage integer,"
            + "position integer,"
             +"uri text )";
+    public static final String MY_NOTE="create table  if not exists  myNote "
+            + "(id integer primary key autoincrement ,"
+            +"mytitle text ,"
+            +"mynote text )";
+
     public MyDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context,name,factory,version);
         mcontext=context;

@@ -31,13 +31,14 @@ public class fileList extends AppCompatActivity {
     boolean finish=false;
     private bookFile bf;
     private LinearLayout l1;
+    private LinearLayout l2;
     private ListView listView;
     private TextView wt;
     private CheckBox cb;
-  //  private boolean firstCk;//第一次被选中弹出popup window
+    //  private boolean firstCk;//第一次被选中弹出popup window
     private int cNum=0;// 选中次数
-  //  private String[] fl;//存储文件路径
-  //  Vector fl=new Vector();
+    //  private String[] fl;//存储文件路径
+    //  Vector fl=new Vector();
     private int i=0;//文件路径数组
     //private boolean[] isclick;//判断listview的item是否被点击
     public Vector isclick=new Vector();//判断listview的item是否被点击
@@ -50,7 +51,8 @@ public class fileList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_list);
-       l1=(LinearLayout)findViewById(R.id.L1);//l1加载  可改为gifView
+        l1=(LinearLayout)findViewById(R.id.L1);//l1加载  可改为gifView
+        l2=(LinearLayout)findViewById(R.id.fileLi);
         listView=(ListView)findViewById(R.id.list_view);//lView列表
         cb=(CheckBox)findViewById(R.id.cb_st);//复选框
         wt=(TextView)findViewById(R.id.wT);
@@ -71,7 +73,7 @@ public class fileList extends AppCompatActivity {
                 //list_map.get(1).getIsCho()
 //点击后在标题上显示点击了第几行
                 // setTitle("你点击了第"+arg2+"行");
-               // currentItem=arg2;
+                // currentItem=arg2;
                 adapter.setSelectedPosition(arg2);
                 adapter.notifyDataSetInvalidated();
                 Toast.makeText(getApplicationContext(), list_map.get(arg2).getUri(),
@@ -84,13 +86,13 @@ public class fileList extends AppCompatActivity {
                     Log.i("set","isclick: "+isclick.elementAt(arg2));
                     adapter.notifyDataSetChanged();
                     //取消复选框
-                   // cb.setChecked(false);
+                    // cb.setChecked(false);
                 }
                 else {
                     cNum++;
                     isclick.setElementAt(new Boolean(true),arg2);
 
-                  //  cb.setChecked(true);
+                    //  cb.setChecked(true);
                     //设置复选框被选中
                     Log.i("set","cNum: "+cNum);
                     Log.i("set","isclick: "+isclick.elementAt(arg2));
@@ -98,13 +100,13 @@ public class fileList extends AppCompatActivity {
                 }
                 if(cNum==1){
                     ch=arg2;
-                   // cb.setChecked(true);
+                    // cb.setChecked(true);
                     //popup window
                     if(isFirst==true){
                         isFirst=false;
-                    Toast.makeText(getApplicationContext(), "弹出窗口",
-                            Toast.LENGTH_SHORT).show();
-                    showPopupWindow();
+                        Toast.makeText(getApplicationContext(), "弹出窗口",
+                                Toast.LENGTH_SHORT).show();
+                        showPopupWindow();
                     }
                 }
                 if(cNum==0){
@@ -161,11 +163,12 @@ public class fileList extends AppCompatActivity {
     }
     private void initFile(){
         Log.i("init","正在加载");
-        File path = Environment.getExternalStorageDirectory();
+      //  File path = Environment.getExternalStorageDirectory();
+        File path=new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download");//只扫描系统下载文件夹
         if (Environment.getExternalStorageState().
                 equals(Environment.MEDIA_MOUNTED)) {
             File[] files = path.listFiles();// 读取文件夹下文件
-           getFileName(files);
+            getFileName(files);
 
             Log.i("init","加载完毕");
         }
@@ -181,7 +184,7 @@ public class fileList extends AppCompatActivity {
                     getFileName(file.listFiles());
                 } else {
                     String fileName = file.getName();
-                   // fl[i]=file.getPath();//??
+                    // fl[i]=file.getPath();//??
                     i++;
                     if (fileName.endsWith(".txt")) {
                         if(file.length()/1024>50) {
@@ -195,11 +198,11 @@ public class fileList extends AppCompatActivity {
                             //String s=fileName.substring(0,fileName.lastIndexOf(".")).toString();
                             str = fileName.substring(0, fileName.lastIndexOf(".")) + "\n";
                             uri=file.getAbsolutePath();
-                           // Map<String, Object> items = new HashMap<String, Object>(); //创建一个键值对的Map集合，用来存放名字和头像
+                            // Map<String, Object> items = new HashMap<String, Object>(); //创建一个键值对的Map集合，用来存放名字和头像
                             bookFile bf=new bookFile(str, R.drawable.txt,sizes,false,uri);
                             //fileList.add(bf);
-                           // items.put("pic", R.drawable.txt);
-                           // items.put("name", str);
+                            // items.put("pic", R.drawable.txt);
+                            // items.put("name", str);
                             list_map.add(bf);
                         }
 
@@ -210,22 +213,22 @@ public class fileList extends AppCompatActivity {
         }
         return str;
     }
-class loadTask extends AsyncTask<Void,Void,Void>{
-    protected  void onPreExecute(){
-        l1.setVisibility(View.VISIBLE);
+    class loadTask extends AsyncTask<Void,Void,Void>{
+        protected  void onPreExecute(){
+            l1.setVisibility(View.VISIBLE);
 
-    }
-    protected  Void doInBackground(Void... parms) {
-        initFile();
-        //return null;
-     //   Log.i("ope","listview初始化完毕");
-        return null;
-    }
-    protected void onPostExecute(Void avoid){
-       // if(list_map.size()==0){
-         //  wt.setText("无txt文件");
-        //}
-       // else {
+        }
+        protected  Void doInBackground(Void... parms) {
+            initFile();
+            //return null;
+            //   Log.i("ope","listview初始化完毕");
+            return null;
+        }
+        protected void onPostExecute(Void avoid){
+            // if(list_map.size()==0){
+            //  wt.setText("无txt文件");
+            //}
+            // else {
             adapter = new FileAdapter(fileList.this, R.layout.list_items, list_map);
             // ListView listView=(ListView)findViewById(R.id.list_view);
             listView.setAdapter(adapter);
@@ -239,8 +242,8 @@ class loadTask extends AsyncTask<Void,Void,Void>{
 
             Log.i("set", "准备切换界面");
             l1.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+            l2.setVisibility(View.VISIBLE);
         }
-   // }
-}
+        // }
+    }
 }

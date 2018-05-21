@@ -33,12 +33,35 @@
             android:text="正在加载请稍后......"
             />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/fileLi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:background="#4876FF"
+                >
+                <Button
+                    android:id="@+id/impbtn"
+                    android:layout_height="match_parent"
+                    android:layout_width="50dp"
+                    android:background="#4876FF"
+                    android:text="导入"
+                    android:textColor="#FFFFFF"
+                    />
+
+            </RelativeLayout>
 <ListView
     android:id="@+id/list_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="invisible"
+
    >
 </ListView>
+        </LinearLayout>
     </FrameLayout>
 </RelativeLayout>

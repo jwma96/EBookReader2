@@ -23,7 +23,8 @@
         <activity android:name=".set" />
         <activity android:name=".ReadingBook" />
         <activity android:name=".sharePic" />
-        <activity android:name=".fileTest"></activity>
+        <activity android:name=".fileTest" />
+        <activity android:name=".noteWrite"></activity>
     </application>
 
 </manifest>
