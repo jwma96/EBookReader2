@@ -55,7 +55,20 @@ public class sharePic extends AppCompatActivity {
         btnshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             //   savePic();//生成图片并分享
+             //
+                // savePic();//生成图片并分享
+                savePic();
+              Uri pic= saveImageToGallery(sharePic.this,savePic());
+                //Environment.getExternalStorageDirectory()+"/mybook/picName"
+                Intent intent = new Intent();
+               // ComponentName comp = new ComponentName("com.tencent.mm","com.tencent.mm.ui.tools.ShareToTimeLineUI");
+                    intent.setClassName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");//微信朋友
+              //  intent.setComponent(comp);
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM ,pic);//uri为你要分享的图片的uri
+                startActivity(intent);
 
             }
         });
@@ -74,16 +87,17 @@ public class sharePic extends AppCompatActivity {
         textView.draw(c);
         return bitmap;
     }
-    public static void saveImageToGallery(Context context, Bitmap bmp) {
+    public static Uri  saveImageToGallery(Context context, Bitmap bmp) {
         File appDir = new File(Environment.getExternalStorageDirectory(), "myBook");
         if (!appDir.exists()) {
             appDir.mkdir();
         }
         String fileName = System.currentTimeMillis() + ".jpg";
         File file = new File(appDir, fileName);
+        Uri img=Uri.fromFile(file);
         try {
             FileOutputStream fos = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);//第二个参数为100表示不压缩即压缩率为0
             fos.flush();
             fos.close();
         } catch (FileNotFoundException e) {
@@ -104,7 +118,7 @@ public class sharePic extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
+        return img;
     }
 
 }

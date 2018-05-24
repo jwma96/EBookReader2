@@ -283,6 +283,9 @@ public class ReadingBook extends AppCompatActivity {
                     CharSequence mytext;
                     if (clipData != null && clipData.getItemCount() > 0) {
                          mytext = clipData.getItemAt(0).getText();//从数据集获取已复制的第一条数据文本？？？
+
+						 //剪贴板中保存的所有剪贴数据集（剪贴板可同时复制/保存多条多种数据条目）
+						 //剪贴数据集中的一个数据条目
                         Intent intent=new Intent(ReadingBook.this,sharePic.class);
                       //  intent.putCharSequenceArrayListExtra("text",mytext);
                         intent.putExtra("text",mytext);

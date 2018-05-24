@@ -3,17 +3,17 @@
         >
         <item
             android:id="@+id/it_copy"
-            android:title="复制1"
+            android:title="复制"
             android:icon="@drawable/add"
             />
         <item
             android:id="@+id/it_cut"
-            android:title="剪藏2"
+            android:title="剪藏"
             android:icon="@drawable/add"
             />
     <item
         android:id="@+id/it_write"
-        android:title="写感想3"
+        android:title="写感想"
         android:icon="@drawable/add"
         />
 </menu>
