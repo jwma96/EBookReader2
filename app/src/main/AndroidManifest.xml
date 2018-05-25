@@ -26,7 +26,8 @@
         <activity android:name=".sharePic" />
         <activity android:name=".fileTest" />
         <activity android:name=".noteWrite" />
-        <activity android:name=".noteList"></activity>
+        <activity android:name=".noteList" />
+        <activity android:name=".readNote"></activity>
     </application>
 
 </manifest>
